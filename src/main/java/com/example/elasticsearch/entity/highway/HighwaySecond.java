@@ -8,12 +8,12 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Data
 @Document(indexName = "highway", type = "second")
-public class Second {
+public class HighwaySecond {
 
     @Id
     private long id;
 
-    @Field(type = FieldType.Long)
+    /*@Field(type = FieldType.Long)
     private long stair;
 
     @Field(type = FieldType.Long)
@@ -23,16 +23,16 @@ public class Second {
     private long three;
 
     @Field(type = FieldType.Keyword)
-    private int type;
+    private int type;*/
 
     private String title;
 
     private String options;
 
-    private String analysis;
+    /*private String analysis;*/
 
     private String answer;
 
-    @Field(type = FieldType.Long)
-    private long sort;
+    /*@Field(type = FieldType.Long)
+    private long sort;*/
 }
