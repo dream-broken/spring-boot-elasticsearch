@@ -2,6 +2,7 @@ package com.example.elasticsearch;
 
 import com.example.elasticsearch.dao.ItemRepository;
 import com.example.elasticsearch.entity.Item;
+import com.example.elasticsearch.entity.build.second.BuildHighwaySecond;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.StringTerms;
@@ -40,7 +41,8 @@ public class ElasticsearchApplicationTests {
 
     @Test
     public void testCreateIndex() {
-        elasticsearchTemplate.createIndex(Item.class);
+        //elasticsearchTemplate.createIndex(Item.class);
+        elasticsearchTemplate.createIndex(BuildHighwaySecond.class);
     }
 
     @Test
