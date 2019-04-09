@@ -1,7 +1,7 @@
 package com.example.elasticsearch;
 
-import com.example.elasticsearch.dao.ItemRepository;
-import com.example.elasticsearch.entity.Item;
+/*import com.example.elasticsearch.dao.ItemRepository;
+import com.example.elasticsearch.entity.Item;*/
 import com.example.elasticsearch.entity.build.second.BuildHighwaySecond;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
@@ -32,8 +32,8 @@ public class ElasticsearchApplicationTests {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
-    @Autowired
-    private ItemRepository itemRepository;
+    /*@Autowired
+    private ItemRepository itemRepository;*/
 
     @Test
     public void contextLoads() {
@@ -47,30 +47,30 @@ public class ElasticsearchApplicationTests {
 
     @Test
     public void testDeleteIndex() {
-        elasticsearchTemplate.deleteIndex(Item.class);
+        //elasticsearchTemplate.deleteIndex(Item.class);
     }
 
     @Test
     public void insert() {
-        Item item = new Item(1L, "小米手机7", " 手机", "小米", 3499.00, "http://image.baidu.com/13123.jpg");
+        /*Item item = new Item(1L, "小米手机7", " 手机", "小米", 3499.00, "http://image.baidu.com/13123.jpg");
         Item save = itemRepository.save(item);
-        System.err.println(save);
+        System.err.println(save)*/;
     }
 
     @Test
     public void insertList() {
-        List<Item> list = new ArrayList<>();
+        /*List<Item> list = new ArrayList<>();
         list.add(new Item(2L, "坚果手机R1", " 手机", "锤子", 3699.00, "http://image.baidu.com/13123.jpg"));
         list.add(new Item(3L, "华为META10", " 手机", "华为", 4499.00, "http://image.baidu.com/13123.jpg"));
         // 接收对象集合，实现批量新增
-        itemRepository.saveAll(list);
+        itemRepository.saveAll(list);*/
     }
 
     @Test
     public void update(){
-        Item item = new Item(1L, "苹果XSMax", " 手机",
+        /*Item item = new Item(1L, "苹果XSMax", " 手机",
                 "小米", 3499.00, "http://image.baidu.com/13123.jpg");
-        itemRepository.save(item);
+        itemRepository.save(item);*/
     }
 
     @Test
@@ -79,11 +79,11 @@ public class ElasticsearchApplicationTests {
         //Iterable<Item> list = this.itemRepository.findAll();
         // 对某字段排序查找所有 Sort.by("price").descending() 降序
         // Sort.by("price").ascending():升序
-        Iterable<Item> list = this.itemRepository.findAll(Sort.by("price").descending());
+        /*Iterable<Item> list = this.itemRepository.findAll(Sort.by("price").descending());
 
         for (Item item:list){
             System.err.println(item);
-        }
+        }*/
     }
 
     /**
@@ -92,14 +92,14 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void insertList1() {
-        List<Item> list = new ArrayList<>();
+        /*List<Item> list = new ArrayList<>();
         list.add(new Item(1L, "小米手机7", "手机", "小米", 3299.00, "http://image.baidu.com/13123.jpg"));
         list.add(new Item(2L, "坚果手机R1", "手机", "锤子", 3699.00, "http://image.baidu.com/13123.jpg"));
         list.add(new Item(3L, "华为META10", "手机", "华为", 4499.00, "http://image.baidu.com/13123.jpg"));
         list.add(new Item(4L, "小米Mix2S", "手机", "小米", 4299.00, "http://image.baidu.com/13123.jpg"));
         list.add(new Item(5L, "荣耀V10", "手机", "华为", 2799.00, "http://image.baidu.com/13123.jpg"));
         // 接收对象集合，实现批量新增
-        itemRepository.saveAll(list);
+        itemRepository.saveAll(list);*/
     }
 
     /**
@@ -108,10 +108,10 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void queryByPriceBetween(){
-        List<Item> list = this.itemRepository.findByPriceBetween(2000.00, 3500.00);
+        /*List<Item> list = this.itemRepository.findByPriceBetween(2000.00, 3500.00);
         for (Item item : list) {
             System.err.println("item = " + item);
-        }
+        }*/
     }
 
     /**
@@ -121,7 +121,7 @@ public class ElasticsearchApplicationTests {
     @Test
     public void testMatchQuery(){
         // 构建查询条件
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 添加基本分词查询
         queryBuilder.withQuery(QueryBuilders.matchQuery("title", "小米手机"));
         // 搜索，获取结果
@@ -131,7 +131,7 @@ public class ElasticsearchApplicationTests {
         System.err.println("total = " + total);
         for (Item item : items) {
             System.err.println(item);
-        }
+        }*/
     }
 
     /**
@@ -142,7 +142,7 @@ public class ElasticsearchApplicationTests {
     @Test
     public void testMathQuery(){
         // 创建对象
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 在queryBuilder对象中自定义查询
         //matchQuery:底层就是使用的termQuery
         queryBuilder.withQuery(QueryBuilders.matchQuery("title","坚果"));
@@ -154,7 +154,7 @@ public class ElasticsearchApplicationTests {
 
         for(Item item:page){
             System.out.println(item);
-        }
+        }*/
 
 
     }
@@ -168,14 +168,14 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void testTermQuery(){
-        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         builder.withQuery(QueryBuilders.termQuery("price",998.0));
         // 查找
         Page<Item> page = this.itemRepository.search(builder.build());
 
         for(Item item:page){
             System.err.println(item);
-        }
+        }*/
     }
     /**
      * @Description:布尔查询
@@ -183,7 +183,7 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void testBooleanQuery(){
-        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
 
         builder.withQuery(
                 QueryBuilders.boolQuery().must(QueryBuilders.matchQuery("title","华为"))
@@ -194,7 +194,7 @@ public class ElasticsearchApplicationTests {
         Page<Item> page = this.itemRepository.search(builder.build());
         for(Item item:page){
             System.err.println(item);
-        }
+        }*/
     }
 
     /**
@@ -203,12 +203,12 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void testFuzzyQuery(){
-        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
         builder.withQuery(QueryBuilders.fuzzyQuery("title","faceoooo"));
         Page<Item> page = this.itemRepository.search(builder.build());
         for(Item item:page){
             System.err.println(item);
-        }
+        }*/
 
     }
 
@@ -220,7 +220,7 @@ public class ElasticsearchApplicationTests {
     @Test
     public void searchByPage(){
         // 构建查询条件
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 添加基本分词查询
         queryBuilder.withQuery(QueryBuilders.matchQuery("category", "手机"));
         // 分页：
@@ -242,7 +242,7 @@ public class ElasticsearchApplicationTests {
 
         for (Item item : items) {
             System.err.println(item);
-        }
+        }*/
     }
 
     /**
@@ -252,7 +252,7 @@ public class ElasticsearchApplicationTests {
     @Test
     public void searchAndSort(){
         // 构建查询条件
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 添加基本分词查询
         queryBuilder.withQuery(QueryBuilders.matchQuery("category", "手机"));
 
@@ -267,7 +267,7 @@ public class ElasticsearchApplicationTests {
 
         for (Item item : items) {
             System.err.println(item);
-        }
+        }*/
     }
 
     /**
@@ -276,7 +276,7 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void testAgg(){
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 不查询任何结果
         queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{""}, null));
         // 1、添加一个新的聚合，聚合类型为terms，聚合名称为brands，聚合字段为brand
@@ -299,7 +299,7 @@ public class ElasticsearchApplicationTests {
             System.err.println(bucket.getDocCount());
 
 
-        }
+        }*/
 
     }
 
@@ -309,7 +309,7 @@ public class ElasticsearchApplicationTests {
      */
     @Test
     public void testSubAgg(){
-        NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
+        /*NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         // 不查询任何结果
         queryBuilder.withSourceFilter(new FetchSourceFilter(new String[]{""}, null));
         // 1、添加一个新的聚合，聚合类型为terms，聚合名称为brands，聚合字段为brand
@@ -333,7 +333,7 @@ public class ElasticsearchApplicationTests {
             // 3.6.获取子聚合结果：
             InternalAvg avg = (InternalAvg) bucket.getAggregations().asMap().get("priceAvg");
             System.err.println("平均售价：" + avg.getValue());
-        }
+        }*/
 
     }
 

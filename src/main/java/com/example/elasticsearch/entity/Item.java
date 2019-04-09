@@ -1,3 +1,4 @@
+/*
 package com.example.elasticsearch.entity;
 
 import lombok.Data;
@@ -10,11 +11,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "item",type = "docs", shards = 1, replicas = 0)
 public class Item {
 
-    /**
+    */
+/**
      * @Description: @Id注解必须是springframework包下的
      * org.springframework.data.annotation.Id
      *@Author: https://blog.csdn.net/chen_2890
-     */
+     *//*
+
     @Id
     private Long id;
 
@@ -45,3 +48,4 @@ public class Item {
     public Item() {
     }
 }
+*/
