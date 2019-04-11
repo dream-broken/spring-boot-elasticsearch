@@ -2,17 +2,32 @@ package com.example.elasticsearch.controller.build.second;
 
 import com.example.elasticsearch.dao.build.second.BuildHighwaySecondRepository;
 import com.example.elasticsearch.entity.build.second.BuildHighwaySecond;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Lists;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.range.InternalRange;
+import org.elasticsearch.search.aggregations.bucket.range.RangeAggregationBuilder;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.avg.InternalAvg;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping
@@ -100,5 +115,61 @@ public class BuildHighwaySecondController {
                 .must(QueryBuilders.rangeQuery("id").gte(start).lte(end));
         QueryBuilder query = new NativeSearchQueryBuilder().withQuery(boolQueryBuilder).build().getQuery();
         return buildHighwaySecondRepository.search(query, PageRequest.of(0, 5)).getContent();
+    }
+
+    @GetMapping("/count_all")
+    public Map<String, Object> countAll() {
+        return ImmutableMap.of("count", buildHighwaySecondRepository.count());
+    }
+
+    @GetMapping("/group_by")
+    public List<Map<String, Object>> groupBy() {
+        TermsAggregationBuilder termsAggregationBuilder = AggregationBuilders.terms("group_by_grade").field("grade.keyword")
+                .subAggregation(AggregationBuilders.avg("average_id").field("id"));
+        NativeSearchQuery query = new NativeSearchQueryBuilder().addAggregation(termsAggregationBuilder).build();
+        AggregatedPage<BuildHighwaySecond> aggregatedPage = (AggregatedPage<BuildHighwaySecond>) buildHighwaySecondRepository.search(query);
+        Terms agg = (Terms) aggregatedPage.getAggregation("group_by_grade");
+        return agg.getBuckets().stream().collect(ArrayList::new, (l, d) -> {
+            Map<String, Object> data = new HashMap<>(2);
+            data.put("group_by_grade", d.getKeyAsString());
+            InternalAvg avg = (InternalAvg) d.getAggregations().asMap().get("average_id");
+            data.put("average_id", avg.getValue());
+            l.add(data);
+        }, (l1, l2) -> l1.addAll(l2));
+    }
+
+    @GetMapping("group_by1")
+    public List<Map<String, Object>> groupBy1() {
+        RangeAggregationBuilder rangeAggregationBuilder = AggregationBuilders.range("group_by_groupId").field("groupId")
+                .addRange(0, 1000).addRange(1000, 2000).addRange(2000, 3000).addRange(3000, 4000)
+                .subAggregation(
+                        AggregationBuilders.terms("group_by_grade").field("grade.keyword")
+                                .subAggregation(AggregationBuilders.avg("average_id").field("id"))
+                );
+        NativeSearchQuery query = new NativeSearchQueryBuilder().addAggregation(rangeAggregationBuilder).build();
+
+        AggregatedPage<BuildHighwaySecond> aggregatedPage = (AggregatedPage<BuildHighwaySecond>) buildHighwaySecondRepository.search(query);
+        InternalRange agg = (InternalRange)aggregatedPage.getAggregation("group_by_groupId");
+
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        for (Object d : agg.getBuckets()) {
+            InternalRange.Bucket o = (InternalRange.Bucket)d;
+            Map<String, Object> data = new HashMap<>(2);
+            data.put("group_by_groupId", o.getKeyAsString());
+
+            Terms groupByGrade = (Terms) o.getAggregations().asMap().get("group_by_grade");
+            List<? extends Terms.Bucket> buckets = groupByGrade.getBuckets();
+            for (Terms.Bucket bucket : buckets) {
+                Map<String, Object> ndata = new HashMap<>(2);
+                ndata.put("group_by_grade", bucket.getKeyAsString());
+                InternalAvg avg = (InternalAvg) bucket.getAggregations().asMap().get("average_id");
+                ndata.put("average_id", avg.getValue());
+                data.put("group_by_grades", ndata);
+            }
+
+            dataList.add(data);
+        }
+
+        return dataList;
     }
 }
