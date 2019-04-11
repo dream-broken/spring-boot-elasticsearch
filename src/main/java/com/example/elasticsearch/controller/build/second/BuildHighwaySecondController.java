@@ -159,13 +159,15 @@ public class BuildHighwaySecondController {
 
             Terms groupByGrade = (Terms) o.getAggregations().asMap().get("group_by_grade");
             List<? extends Terms.Bucket> buckets = groupByGrade.getBuckets();
+            List<Object> gee = new ArrayList<>();
             for (Terms.Bucket bucket : buckets) {
                 Map<String, Object> ndata = new HashMap<>(2);
                 ndata.put("group_by_grade", bucket.getKeyAsString());
                 InternalAvg avg = (InternalAvg) bucket.getAggregations().asMap().get("average_id");
                 ndata.put("average_id", avg.getValue());
-                data.put("group_by_grades", ndata);
+                gee.add(ndata);
             }
+            data.put("group_by_grades", gee);
 
             dataList.add(data);
         }
