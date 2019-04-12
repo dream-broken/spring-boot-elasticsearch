@@ -24,10 +24,20 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--springboot-data内置用的是Java API 官方不建议使用-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+
+        <!--使用Java REST Client API 官方建议使用-->
+        <!-- https://mvnrepository.com/artifact/org.elasticsearch.client/elasticsearch-rest-client -->
+        <!--<dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>7.0.0</version>
+        </dependency>-->
+
 
         <dependency>
             <groupId>org.projectlombok</groupId>
