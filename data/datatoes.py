@@ -1,7 +1,7 @@
 from elasticsearch import Elasticsearch
 import pymysql
 
-es = Elasticsearch([{'host':'127.0.0.1','port':9200}])
+es = Elasticsearch([{'host':'127.0.0.1','port':9111}])
 
 # 打开数据库连接
 db = pymysql.connect("localhost","root","root","mkds" )
@@ -30,7 +30,7 @@ for ids  in sqlIdsResults:
     result = data[7]
     grade = data[8]
 
-    es.index(index="build", doc_type="highway_second", id=esid, body={"id": esid, "groupId": groupId, "realTopicId": realTopicId, "type": estype, "title": title, "content": content, "analysis": analysis, "result": result, "grade": grade})
+    es.index(index="build", doc_type="_doc", id=esid, body={"id": esid, "groupId": groupId, "realTopicId": realTopicId, "type": estype, "title": title, "content": content, "analysis": analysis, "result": result, "grade": grade})
 
 # 关闭数据库连接
 db.close()
